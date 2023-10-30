@@ -19,13 +19,13 @@ def all_states():
     return json_obj
 
 
-@app_views.get("/states/<state_id>", strict_slashes=False)
-def one_state(state_id):
-    """ Gets a state by it's id """
+@app_views.get("/states/<state_id>/cities", strict_slashes=False)
+def state_cities(state_id):
+    """ get all cities in a state object """
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
-    return state.to_dict()
+    return state.cities
 
 
 @app_views.delete("/states/<state_id>")
