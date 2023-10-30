@@ -18,6 +18,7 @@ def all_states():
         json_obj.append(state.to_dict())
     return json_obj
 
+
 @app_views.get("/states/<state_id>", strict_slashes=False)
 def one_state(state_id):
     """ Gets a state by it's id """
@@ -25,6 +26,7 @@ def one_state(state_id):
     if state is None:
         abort(404)
     return state.to_dict()
+
 
 @app_views.delete("/states/<state_id>")
 def del_state(state_id):
@@ -34,6 +36,7 @@ def del_state(state_id):
         abort(404)
     storage.delete(state)
     return {}, 200
+
 
 @app_views.post("/states", strict_slashes=False)
 def new_state():
@@ -47,5 +50,20 @@ def new_state():
         storage.new(state)
         storage.save()
         return state.to_dict(), 201
+    except Exception:
+        return "Not a JSON", 400
+
+
+@app_views.put("/states/<state_id>", strict_slashes=False)
+def update_state(state_id):
+    """ updates a state object """
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+    try:
+        data = request.get_json()
+        setattr(state, 'name', data['name'])
+        storage.save()
+        return state.to_dict(), 200
     except Exception:
         return "Not a JSON", 400
