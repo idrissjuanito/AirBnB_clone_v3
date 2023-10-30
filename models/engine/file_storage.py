@@ -51,6 +51,7 @@ class FileStorage:
         or count all is no cls passed
         """
         count = 0
+
         if cls is None:
             count = len(self.__objects.keys())
             return count
