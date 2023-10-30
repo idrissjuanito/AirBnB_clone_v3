@@ -8,7 +8,7 @@ from models import storage
 from models.state import State
 
 
-@app_views.route("/states")
+@app_views.get("/states", strict_slashes=False)
 def all_states():
     """ fetches and delivers all state objects """
     json_obj = []
@@ -18,7 +18,7 @@ def all_states():
         json_obj.append(state.to_dict())
     return json_obj
 
-@app_views.route("/states/<state_id>")
+@app_views.get("/states/<state_id>", strict_slashes=False)
 def one_state(state_id):
     """ Gets a state by it's id """
     state = storage.get(State, state_id)
@@ -26,7 +26,7 @@ def one_state(state_id):
         abort(404)
     return state.to_dict()
 
-@app_views.route("/states/<state_id>")
+@app_views.delete("/states/<state_id>")
 def del_state(state_id):
     """ Deletes a state by id """
     state = storage.get(State, state_id)
@@ -34,3 +34,18 @@ def del_state(state_id):
         abort(404)
     storage.delete(state)
     return {}, 200
+
+@app_views.post("/states", strict_slashes=False)
+def new_state():
+    """ handles post request to create new state object """
+    try:
+        data = request.get_json()
+        if "name" not in data.keys():
+            return "Missing name", 400
+        state = State(data['name'])
+        setattr(state, 'name', data['name'])
+        storage.new(state)
+        storage.save()
+        return state.to_dict(), 201
+    except Exception:
+        return "Not a JSON", 400
