@@ -13,6 +13,12 @@ def teardown_db(exception):
     storage.close()
 
 
+@app.errorhandler(404)
+def page_not_found(error):
+    """ handles 404 errors """
+    return {"error": "Not found"}, 404
+
+
 if __name__ == "__main__":
     from os import getenv
 
