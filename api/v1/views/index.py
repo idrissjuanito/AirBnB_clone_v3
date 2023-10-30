@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """ handle route views """
 from api.v1.views import app_views
 

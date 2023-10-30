@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """ Airbnb flask api entry point """
 from api.v1.views import app_views
 from flask import Flask
