@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """ Airbnb flask api entry point """
 from api.v1.views import app_views
 from flask import Flask
@@ -10,6 +11,12 @@ app.register_blueprint(app_views, url_prefix="/api/v1")
 def teardown_db(exception):
     """ closes open storage connections """
     storage.close()
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    """ handles 404 errors """
+    return {"error": "Not found"}, 404
 
 
 if __name__ == "__main__":
