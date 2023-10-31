@@ -19,7 +19,7 @@ def all_states():
     return json_obj
 
 
-@app_views.get("/states/<state_id>/cities", strict_slashes=False)
+@app_views.get("/states/<state_id>", strict_slashes=False)
 def state_cities(state_id):
     """ get all cities in a state object """
     state = storage.get(State, state_id)

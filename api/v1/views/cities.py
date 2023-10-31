@@ -18,13 +18,16 @@ def one_city(city_id):
     return city.to_dict()
 
 
-@app_views.get("/cities/<state_id>/cities", strict_slashes=False)
+@app_views.get("/states/<state_id>/cities", strict_slashes=False)
 def city_cities(state_id):
     """ Gets a city by it's id """
-    state = storage.get(State, city_id)
+    state = storage.get(State, state_id)
     if state is None:
         abort(404)
-    return city.cities
+    cities = []
+    for city in state.cities:
+        cities.append(city.to_dict())
+    return cities
 
 
 @app_views.delete("/cities/<city_id>")
@@ -60,7 +63,7 @@ def new_city(state_id):
 @app_views.put("/cities/<city_id>", strict_slashes=False)
 def update_city(city_id):
     """ updates a city object """
-    city = storage.get(city, city_id)
+    city = storage.get(City, city_id)
     if city is None:
         abort(404)
     try:
