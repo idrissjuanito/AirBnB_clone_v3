@@ -7,7 +7,6 @@ from os import getenv
 import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.exc import NoResultFound
 import models
 from models.amenity import Amenity
 from models.base_model import BaseModel, Base
@@ -61,7 +60,7 @@ class DBStorage:
         try:
             obj = self.__session.query(cls).filter(cls.id == id).one()
             return obj
-        except NoResultFound:
+        except Exception:
             return None
 
     def count(self, cls=None):
