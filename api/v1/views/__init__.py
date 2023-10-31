@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """ Views module """
 from flask import Blueprint
 

@@ -7,6 +7,7 @@ from os import getenv
 import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.exc import NoResultFound
 import models
 from models.amenity import Amenity
 from models.base_model import BaseModel, Base
@@ -50,6 +51,31 @@ class DBStorage:
                     key = obj.__class__.__name__ + '.' + obj.id
                     new_dict[key] = obj
         return (new_dict)
+
+    def get(self, cls, id):
+        """ Get a record by class and id """
+        if not cls or not id:
+            return None
+        if type(cls) is str:
+            cls = classes[cls]
+        try:
+            obj = self.__session.query(cls).filter(cls.id == id).one()
+            return obj
+        except NoResultFound:
+            return None
+
+    def count(self, cls=None):
+        """ counts the number of records for cls or all if no cls """
+        count = 0
+        if cls is None:
+            for clss in classes.values():
+                count += self.__session.query(clss).count()
+        else:
+            if cls not in classes.values():
+                return count
+            else:
+                count += self.__session.query(cls).count()
+        return count
 
     def new(self, obj):
         """add the object to the current database session"""
